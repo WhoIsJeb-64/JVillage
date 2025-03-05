@@ -48,6 +48,7 @@ public class JVillageLanguage extends Configuration {
         map.put("build_denied", "&4Sorry, you don't have permission to build in &9%village%");
         map.put("destroy_denied", "&4Sorry, you don't have permission to destroy in &9%village%");
         map.put("ignite_denied", "&4Sorry, you don't have permission to \"ignite\" in &9%village% :(");
+        map.put("pvp_denied", "&4Sorry, PvP is disabled in &9%village%");
 
         map.put("notification_invites", "&bYou have pending village invites! To view, type &9/village invites");
 
