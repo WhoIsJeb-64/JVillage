@@ -41,7 +41,8 @@ public class JInvitesCommand extends JVBaseCommand implements CommandExecutor {
         commandSender.sendMessage(language.getMessage("command_village_invites_pending"));
         for (Village village : invites) {
             String message = language.getMessage("command_village_invites_village");
-            message = message.replace("%village%", village.getTownName());
+            String villageDisplayName = village.getTownName().replace(" ", "_");
+            message = message.replace("%village%", villageDisplayName);
             commandSender.sendMessage(message);
         }
         commandSender.sendMessage(language.getMessage("command_village_invites_invite_use"));
