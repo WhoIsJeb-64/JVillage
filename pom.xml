@@ -8,6 +8,7 @@
     <artifactId>JVillage</artifactId>
     <version>1.1.2</version>
 
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
