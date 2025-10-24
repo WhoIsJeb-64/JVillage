@@ -11,6 +11,7 @@ import com.johnymuffin.jvillage.beta.models.chunk.VChunk;
 import com.johnymuffin.jvillage.beta.models.chunk.VClaim;
 import com.johnymuffin.jvillage.beta.player.VPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -56,10 +57,24 @@ public class JCreateCommand extends JVBaseCommand implements CommandExecutor {
             return true;
         }
 
-        String villageName = strings[0];
+        String villageName = strings[0].replace("_", " ");
 
-        //If string doesn't only contain numbers and letters
-        if (!villageName.matches("[a-zA-Z0-9]+")) {
+        String rawVillageName = strings[0];
+        if(rawVillageName.startsWith("_")) {
+            commandSender.sendMessage(ChatColor.RED + "Village names cannot start with an underscore.");
+            return true;
+        }
+        if(rawVillageName.contains("__")) {
+            commandSender.sendMessage(ChatColor.RED + "Village names cannot contain two consecutive underscores.");
+            return true;
+        }
+        if(rawVillageName.replace("_", "").trim().isEmpty()) {
+            commandSender.sendMessage(ChatColor.RED + "Village names cannot consist only of underscores.");
+            return true;
+        }
+
+        //If string doesn't only contain numbers, letters and spaces
+        if (!villageName.matches("[a-zA-Z0-9 ]+")) {
             commandSender.sendMessage(language.getMessage("command_village_create_invalid_name")
                     .replace("%max%", settings.getConfigInteger("settings.town.max-name-length.value").toString()));
             return true;

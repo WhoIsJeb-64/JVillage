@@ -68,7 +68,7 @@ public class JInviteCommand extends JVBaseCommand implements CommandExecutor {
                 //Message target
                 if (vTarget.isPlayerOnline()) {
                     String targetMessage = language.getMessage("command_village_invite_received");
-                    targetMessage = targetMessage.replace("%village%", village.getTownName());
+                    targetMessage = targetMessage.replace("%village%", village.getTownName().replace(" ", "_"));
                     sendWithNewline(JVUtility.getPlayerFromUUID(vTarget.getUUID()), targetMessage);
                 }
                 //Broadcast
