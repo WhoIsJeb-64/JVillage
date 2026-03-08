@@ -75,7 +75,7 @@ public class JDeleteCommand extends JVBaseCommand implements CommandExecutor {
             }
         }
 
-        if (refundAmount > 0 && plugin.isZCoreEnabled()) {
+        if (refundAmount > 0 && plugin.isAurumEnabled()) {
             try {
                 AurumUser user = Aurum.api().user(player.getUniqueId());
                 user.addBalance(refundAmount);

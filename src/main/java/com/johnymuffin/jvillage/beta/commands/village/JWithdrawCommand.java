@@ -91,7 +91,7 @@ public class JWithdrawCommand extends JVBaseCommand implements CommandExecutor {
             return true;
         }
 
-        if (!this.plugin.isZCoreEnabled()) {
+        if (!this.plugin.isAurumEnabled()) {
             sendWithNewline(commandSender, language.getMessage("economy_disabled"));
             return true;
         }

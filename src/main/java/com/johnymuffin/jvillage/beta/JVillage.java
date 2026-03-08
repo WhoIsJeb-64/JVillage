@@ -974,7 +974,7 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
         return username;
     }
 
-    public boolean isZCoreEnabled() {
+    public boolean isAurumEnabled() {
         return aurumEnabled;
     }
 }

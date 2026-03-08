@@ -121,7 +121,7 @@ public class JCreateCommand extends JVBaseCommand implements CommandExecutor {
 
         //Check if player has enough money
         double creationCost = settings.getConfigDouble("settings.town-create.price.amount");
-        if (creationCost > 0 && plugin.isZCoreEnabled()) {
+        if (creationCost > 0 && plugin.isAurumEnabled()) {
             String message = "";
 
             AurumUser user = Aurum.api().user(player.getUniqueId());
