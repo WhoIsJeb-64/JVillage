@@ -12,8 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.whoisjeb.aurum.Aurum;
 import org.whoisjeb.aurum.data.AurumUser;
-
-import java.math.BigDecimal;
 import java.util.logging.Level;
 
 public class JWithdrawCommand extends JVBaseCommand implements CommandExecutor {
