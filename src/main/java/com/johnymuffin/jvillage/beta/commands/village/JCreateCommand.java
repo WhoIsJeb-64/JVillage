@@ -8,16 +8,14 @@ import com.johnymuffin.jvillage.beta.models.chunk.ChunkClaimSettings;
 import com.johnymuffin.jvillage.beta.models.chunk.VChunk;
 import com.johnymuffin.jvillage.beta.models.chunk.VClaim;
 import com.johnymuffin.jvillage.beta.player.VPlayer;
-import me.zavdav.zcore.ZCore;
-import me.zavdav.zcore.economy.BankAccount;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.math.BigDecimal;
+import org.whoisjeb.aurum.Aurum;
+import org.whoisjeb.aurum.data.AurumUser;
 import java.util.UUID;
 
 import static com.johnymuffin.jvillage.beta.JVUtility.getChunkCenter;
@@ -125,28 +123,18 @@ public class JCreateCommand extends JVBaseCommand implements CommandExecutor {
         double creationCost = settings.getConfigDouble("settings.town-create.price.amount");
         if (creationCost > 0 && plugin.isZCoreEnabled()) {
             String message = "";
-            try {
-                //Economy.subtractBalance(player.getUniqueId(), creationCost);
-                for (BankAccount acc : ZCore.Api.getBankAccounts()) {
-                    if (acc.getOwner().getUuid() == player.getUniqueId()) {
-                        acc.setBalance(acc.getBalance().subtract(BigDecimal.valueOf(creationCost)));
-                        break;
-                    }
-                }
-                message = language.getMessage("command_village_create_payment");
-                message = message.replace("%amount%", String.valueOf(creationCost));
-                message = message.replace("%village%", villageName);
-            } catch (Throwable e) {
-                if (e.getClass().getName().equals("me.zavdav.zcore.util.NoFundsException")) {
-                    message = language.getMessage("command_village_create_insufficient_funds");
-                    message = message.replace("%cost%", String.valueOf(creationCost));
-                } else {
-                    message = language.getMessage("unknown_economy_error");
-                }
-                return true;
-            } finally {
-                commandSender.sendMessage(message);
+
+            AurumUser user = Aurum.api().user(player.getUniqueId());
+            if (!user.subtractBalance(creationCost, false)) {
+                message = language.getMessage("command_village_create_insufficient_funds");
+                message = message.replace("%cost%", String.valueOf(creationCost));
             }
+
+            message = language.getMessage("command_village_create_payment");
+            message = message.replace("%amount%", String.valueOf(creationCost));
+            message = message.replace("%village%", villageName);
+
+            commandSender.sendMessage(message);
         }
 
         Village newVillage = new Village(plugin, villageName, UUID.randomUUID(), player.getUniqueId(), vChunk, new VSpawnCords(player.getLocation()));

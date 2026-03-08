@@ -7,15 +7,13 @@ import com.johnymuffin.jvillage.beta.models.Village;
 import com.johnymuffin.jvillage.beta.models.chunk.ChunkClaimSettings;
 import com.johnymuffin.jvillage.beta.models.chunk.VClaim;
 import com.johnymuffin.jvillage.beta.player.VPlayer;
-import me.zavdav.zcore.ZCore;
-import me.zavdav.zcore.economy.BankAccount;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.math.BigDecimal;
+import org.whoisjeb.aurum.Aurum;
+import org.whoisjeb.aurum.data.AurumUser;
 import java.util.logging.Level;
 
 import static com.johnymuffin.jvillage.beta.JVUtility.cordsInChunk;
@@ -79,13 +77,9 @@ public class JDeleteCommand extends JVBaseCommand implements CommandExecutor {
 
         if (refundAmount > 0 && plugin.isZCoreEnabled()) {
             try {
-                //Economy.addBalance(player.getUniqueId(), refundAmount);
-                for (BankAccount acc : ZCore.Api.getBankAccounts()) {
-                    if (acc.getOwner().getUuid() == player.getUniqueId()) {
-                        acc.setBalance(acc.getBalance().add(BigDecimal.valueOf(refundAmount)));
-                        break;
-                    }
-                }
+                AurumUser user = Aurum.api().user(player.getUniqueId());
+                user.addBalance(refundAmount);
+
                 this.plugin.logger(Level.INFO, "Successfully refunded $" + refundAmount + " to " + player.getName() + " for deleting village " + village.getTownName());
             } catch (Throwable e) {
                 this.plugin.logger(Level.WARNING, "Failed to refund $" + refundAmount + " to " + player.getName() + " for deleting village " + village.getTownName());

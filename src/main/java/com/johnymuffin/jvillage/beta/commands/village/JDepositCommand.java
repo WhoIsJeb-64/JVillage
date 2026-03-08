@@ -5,14 +5,12 @@ import com.johnymuffin.jvillage.beta.JVillage;
 import com.johnymuffin.jvillage.beta.commands.JVBaseCommand;
 import com.johnymuffin.jvillage.beta.models.Village;
 import com.johnymuffin.jvillage.beta.player.VPlayer;
-import me.zavdav.zcore.ZCore;
-import me.zavdav.zcore.economy.BankAccount;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.math.BigDecimal;
+import org.whoisjeb.aurum.Aurum;
+import org.whoisjeb.aurum.data.AurumUser;
 import java.util.logging.Level;
 
 public class JDepositCommand extends JVBaseCommand implements CommandExecutor {
@@ -87,28 +85,20 @@ public class JDepositCommand extends JVBaseCommand implements CommandExecutor {
         }
 
         //Attempt to withdraw money from player
-        try {
-            //Economy.subtractBalance(player.getUniqueId(), amount);
-            for (BankAccount acc : ZCore.Api.getBankAccounts()) {
-                if (acc.getOwner().getUuid() == player.getUniqueId()) {
-                    acc.setBalance(acc.getBalance().subtract(BigDecimal.valueOf(amount)));
-                    break;
-                }
-            }
-            village.addBalance(amount);
-            String message = language.getMessage("command_village_deposit_success").replace("%amount%", String.valueOf(amount)).replace("%village%", village.getTownName());
-            commandSender.sendMessage(message);
-            //Send message to all online members
-            String broadcast = language.getMessage("command_village_deposit_broadcast").replace("%amount%", String.valueOf(amount)).replace("%village%", village.getTownName()).replace("%player%", player.getName());
-            village.broadcastToTown(broadcast);
-            plugin.logger(Level.INFO, "Player " + player.getName() + " deposited $" + amount + " into the bank of" + village.getTownName());
-        } catch (Throwable e) {
-            if (e.getClass().getName().equals("me.zavdav.zcore.util.NoFundsException")) {
-                commandSender.sendMessage(language.getMessage("command_village_deposit_no_funds"));
-            } else {
-                commandSender.sendMessage(language.getMessage("generic_error"));
-            }
+        AurumUser user = Aurum.api().user(player.getUniqueId());
+        if (!user.subtractBalance(amount, false)) {
+            commandSender.sendMessage(language.getMessage("command_village_deposit_no_funds"));
+            return true;
         }
+
+        village.addBalance(amount);
+        String message = language.getMessage("command_village_deposit_success").replace("%amount%", String.valueOf(amount)).replace("%village%", village.getTownName());
+        commandSender.sendMessage(message);
+
+        //Send message to all online members
+        String broadcast = language.getMessage("command_village_deposit_broadcast").replace("%amount%", String.valueOf(amount)).replace("%village%", village.getTownName()).replace("%player%", player.getName());
+        village.broadcastToTown(broadcast);
+        plugin.logger(Level.INFO, "Player " + player.getName() + " deposited $" + amount + " into the bank of" + village.getTownName());
 
         return true;
     }

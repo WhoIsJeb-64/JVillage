@@ -78,7 +78,7 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
 
     private Metrics metrics;
 
-    private boolean zcoreEnabled = false;
+    private boolean aurumEnabled = false;
 
     @Override
     public void onEnable() {
@@ -89,12 +89,12 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
         log.info("[" + pluginName + "] Is Loading, Version: " + pdf.getVersion());
 
         //Check for ZCore
-        if (Bukkit.getPluginManager().getPlugin("ZCore") == null) {
-            zcoreEnabled = false;
-            log.warning("[" + pluginName + "] ZCore is not installed or not enabled, economy features will be disabled");
+        if (Bukkit.getPluginManager().getPlugin("Aurum") == null) {
+            aurumEnabled = false;
+            log.warning("[" + pluginName + "] Aurum is not installed or not enabled, economy features will be disabled");
         } else {
-            log.info("[" + pluginName + "] ZCore is installed and enabled, economy features will be enabled");
-            zcoreEnabled = true;
+            log.info("[" + pluginName + "] Aurum is installed and enabled, economy features will be enabled");
+            aurumEnabled = true;
         }
 
 
@@ -102,12 +102,6 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
         settings = new JVillageSettings(new File(this.getDataFolder(), "settings.yml"));
         debugMode = settings.getConfigBoolean("settings.debug-mode.enabled"); //Set debug mode from config
         language = new JVillageLanguage(new File(this.getDataFolder(), "language.yml"), settings.getConfigBoolean("settings.always-use-default-lang.enabled"));
-
-        //Generate WorldCLaimManagers
-//        for (World world : Bukkit.getWorlds()) {
-////            claims.put(world.getName(), new WorldClaimManager(plugin, world.getName()));
-//            getWorldClaimManager(world.getName(), true);
-//        }
 
         //Load villages
         int villagesLoaded = 0;
@@ -981,6 +975,6 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
     }
 
     public boolean isZCoreEnabled() {
-        return zcoreEnabled;
+        return aurumEnabled;
     }
 }
