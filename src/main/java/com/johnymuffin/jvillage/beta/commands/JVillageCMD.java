@@ -59,10 +59,6 @@ public class JVillageCMD extends JVBaseCommand {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-//        if (!isAuthorized(commandSender, "jvillage.player")) {
-//            commandSender.sendMessage(language.getMessage("no_permission"));
-//            return true;
-//        }
         if (strings.length > 0) {
             String subcommand = strings[0];
             //New Command System

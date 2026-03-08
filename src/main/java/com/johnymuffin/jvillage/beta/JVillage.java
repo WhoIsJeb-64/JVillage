@@ -62,9 +62,6 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
     private Logger log;
     private String pluginName;
     private PluginDescriptionFile pdf;
-    //    private HashMap<VillageEntry, Village> villages = new HashMap<>(); //Main list for all villages
-//    private HashMap<String, WorldClaimManager> claims = new HashMap<>();
-//    private ArrayList<VClaim> claims = new ArrayList<>();
     private HashMap<Village, ArrayList<VClaim>> claims = new HashMap<>();
 
     private JVillageLanguage language;
@@ -202,7 +199,7 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
 //            int x = (int) (Math.random() * 60000) - 30000;
 //            int z = (int) (Math.random() * 60000) - 30000;
 //
-//            //Get closest village
+//            //Get the closest village
 //            VClaim claim = findClosestClaim(new VCords(x, 0, z, Bukkit.getWorlds().get(0).getName()));
 //            Village village = getVillageMap().getVillage(claim.getVillage());
 //            logger(Level.INFO, "Closest claim to " + x + ", " + z + " is " + village.getTownName() + " at " + (claim.getX() * 16) + ", " + (claim.getZ() * 16));
@@ -399,14 +396,10 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
         //Remove all members
         ArrayList<UUID> membersToRemove = new ArrayList<>();
 
-        for (UUID uuid : village.getMembers()) {
-            membersToRemove.add(uuid);
-        }
+        Collections.addAll(membersToRemove, village.getMembers());
 
         //Remove all assistants
-        for (UUID uuid : village.getAssistants()) {
-            membersToRemove.add(uuid);
-        }
+        Collections.addAll(membersToRemove, village.getAssistants());
 
         membersToRemove.add(village.getOwner());
 
@@ -581,7 +574,6 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
                         claimsImported++;
                     } catch (Exception e) {
                         //Don't do anything if an exception is encountered
-                        continue;
                     }
                 }
             }
@@ -795,7 +787,7 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
             }
 
             //Skip if no claims
-            if (villageClaims.size() == 0) {
+            if (villageClaims.isEmpty()) {
                 log.warning("[" + pluginName + "] Faction " + newVillageName + " has no claims. The faction will not be imported.");
                 factionsSkipped++;
                 continue;
@@ -939,10 +931,7 @@ public class JVillage extends JavaPlugin implements ClaimManager, PoseidonCustom
     }
 
     public boolean villageUUIDAvailable(UUID uuid) {
-        if (villageMap.getVillage(uuid) != null) {
-            return false;
-        }
-        return true;
+        return villageMap.getVillage(uuid) == null;
     }
 
 

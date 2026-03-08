@@ -54,10 +54,10 @@ public class JFlagCommand extends JVBaseCommand implements CommandExecutor {
             //Generate flags string
             String flags = "";
             for (Map.Entry<VillageFlags, Boolean> entry : village.getFlags().entrySet()) {
-                flags += "\n" + entry.getKey() + ": " + (entry.getValue() ? "Enabled" : "Disabled") + ", ";
+                String flagName = flagName(entry.getKey().toString());
+                flags += "\n" + flagName + ": " + (entry.getValue() ? "§aTrue§7" : "§cFalse§7") + ", ";
             }
-            flags = flags.substring(0, flags.length() - 2);
-
+            flags = flags.substring(0, flags.length() - 2) + "§7.";
             message = message.replace("%flags%", flags);
 
             sendWithNewline(commandSender, message);
@@ -112,5 +112,10 @@ public class JFlagCommand extends JVBaseCommand implements CommandExecutor {
 
         sendWithNewline(commandSender, message);
         return true;
+    }
+
+    private String flagName(String name) {
+        name = name.charAt(0) + name.substring(1).toLowerCase();
+        return "§7" + name.replaceAll("_", " ");
     }
 }

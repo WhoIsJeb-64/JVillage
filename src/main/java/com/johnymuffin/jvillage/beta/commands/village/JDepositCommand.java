@@ -5,12 +5,14 @@ import com.johnymuffin.jvillage.beta.JVillage;
 import com.johnymuffin.jvillage.beta.commands.JVBaseCommand;
 import com.johnymuffin.jvillage.beta.models.Village;
 import com.johnymuffin.jvillage.beta.player.VPlayer;
-import me.zavdav.zcore.api.Economy;
+import me.zavdav.zcore.ZCore;
+import me.zavdav.zcore.economy.BankAccount;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
 import java.util.logging.Level;
 
 public class JDepositCommand extends JVBaseCommand implements CommandExecutor {
@@ -86,7 +88,13 @@ public class JDepositCommand extends JVBaseCommand implements CommandExecutor {
 
         //Attempt to withdraw money from player
         try {
-            Economy.subtractBalance(player.getUniqueId(), amount);
+            //Economy.subtractBalance(player.getUniqueId(), amount);
+            for (BankAccount acc : ZCore.Api.getBankAccounts()) {
+                if (acc.getOwner().getUuid() == player.getUniqueId()) {
+                    acc.setBalance(acc.getBalance().subtract(BigDecimal.valueOf(amount)));
+                    break;
+                }
+            }
             village.addBalance(amount);
             String message = language.getMessage("command_village_deposit_success").replace("%amount%", String.valueOf(amount)).replace("%village%", village.getTownName());
             commandSender.sendMessage(message);

@@ -93,7 +93,7 @@ public class JVMobListener extends EntityListener {
         VPlayer vPlayer = plugin.getPlayerMap().getPlayer(player.getUniqueId());
 
         //Return if the player is not in a village
-        if (vPlayer.isLocatedInVillage() == false) {
+        if (!vPlayer.isLocatedInVillage()) {
             return;
         }
 //        System.out.println("Player was damaged by a hostile mob in a village");
@@ -119,7 +119,7 @@ public class JVMobListener extends EntityListener {
         }
 
         Village damagerVillage = plugin.getVillageAtLocation(event.getDamager().getLocation());
-        if (damagerVillage.isPvpEnabled) {
+        if (damagerVillage.isPvpEnabled()) {
             return;
         }
 

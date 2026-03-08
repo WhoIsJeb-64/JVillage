@@ -3,6 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=java,intellij,intellij+all,intellij+iml
 
 .vscode/
+libs
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm

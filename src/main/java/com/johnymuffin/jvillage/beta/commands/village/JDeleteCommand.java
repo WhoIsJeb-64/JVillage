@@ -7,13 +7,15 @@ import com.johnymuffin.jvillage.beta.models.Village;
 import com.johnymuffin.jvillage.beta.models.chunk.ChunkClaimSettings;
 import com.johnymuffin.jvillage.beta.models.chunk.VClaim;
 import com.johnymuffin.jvillage.beta.player.VPlayer;
-import me.zavdav.zcore.api.Economy;
+import me.zavdav.zcore.ZCore;
+import me.zavdav.zcore.economy.BankAccount;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
 import java.util.logging.Level;
 
 import static com.johnymuffin.jvillage.beta.JVUtility.cordsInChunk;
@@ -77,7 +79,13 @@ public class JDeleteCommand extends JVBaseCommand implements CommandExecutor {
 
         if (refundAmount > 0 && plugin.isZCoreEnabled()) {
             try {
-                Economy.addBalance(player.getUniqueId(), refundAmount);
+                //Economy.addBalance(player.getUniqueId(), refundAmount);
+                for (BankAccount acc : ZCore.Api.getBankAccounts()) {
+                    if (acc.getOwner().getUuid() == player.getUniqueId()) {
+                        acc.setBalance(acc.getBalance().add(BigDecimal.valueOf(refundAmount)));
+                        break;
+                    }
+                }
                 this.plugin.logger(Level.INFO, "Successfully refunded $" + refundAmount + " to " + player.getName() + " for deleting village " + village.getTownName());
             } catch (Throwable e) {
                 this.plugin.logger(Level.WARNING, "Failed to refund $" + refundAmount + " to " + player.getName() + " for deleting village " + village.getTownName());

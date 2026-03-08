@@ -151,7 +151,7 @@ public class Village implements ClaimManager {
 //                if (this.plugin.isClaimed(vClaim)) {
 //                    Village village = this.plugin.getVillageAtLocation(vClaim);
 //                    plugin.logger(Level.WARNING, "Skipping claim: " + vClaim.toString() + " for " + getTownName() + " as it is already claimed by " + village.getTownName() + ". It is advised that you delete this claim from the JSON file or unclaim it with \"/va village unclaim\" while standing in it.");
-//                    //Possibly a continued here? For now I'll leave it up to admins to fix
+//                    //Possibly a continued here? For now, I'll leave it up to admins to fix
 //                }
                 addClaim(vClaim);
             }
@@ -482,11 +482,7 @@ public class Village implements ClaimManager {
             return true;
         }
 
-        if (owner.equals(uuid)) {
-            return true;
-        }
-
-        return false;
+        return owner.equals(uuid);
     }
 
     public boolean isAssistant(UUID uuid) {
@@ -494,19 +490,11 @@ public class Village implements ClaimManager {
             return true;
         }
 
-        if (owner.equals(uuid)) {
-            return true;
-        }
-
-        return false;
+        return owner.equals(uuid);
     }
 
     public boolean isOwner(UUID uuid) {
-        if (owner.equals(uuid)) {
-            return true;
-        }
-
-        return false;
+        return owner.equals(uuid);
     }
 
     public boolean removeMember(UUID uuid) {
@@ -596,7 +584,8 @@ public class Village implements ClaimManager {
         this.flags.put(VillageFlags.PREVENT_MUSHROOM_SPREAD, value);
     }
 
-    public boolean isPreventIceSnowMelt() {return this.flags.getOrDefault(VillageFlags.PREVENT_ICE_SNOW_MELT, false);
+    public boolean isPreventIceSnowMelt() {
+        return this.flags.getOrDefault(VillageFlags.PREVENT_ICE_SNOW_MELT, false);
     }
 
     public void setPreventIceSnowMelt(boolean value) {

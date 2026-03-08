@@ -8,7 +8,8 @@ import com.johnymuffin.jvillage.beta.models.chunk.ChunkClaimSettings;
 import com.johnymuffin.jvillage.beta.models.chunk.VChunk;
 import com.johnymuffin.jvillage.beta.models.chunk.VClaim;
 import com.johnymuffin.jvillage.beta.player.VPlayer;
-import me.zavdav.zcore.api.Economy;
+import me.zavdav.zcore.ZCore;
+import me.zavdav.zcore.economy.BankAccount;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -16,6 +17,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static com.johnymuffin.jvillage.beta.JVUtility.getChunkCenter;
@@ -124,7 +126,13 @@ public class JCreateCommand extends JVBaseCommand implements CommandExecutor {
         if (creationCost > 0 && plugin.isZCoreEnabled()) {
             String message = "";
             try {
-                Economy.subtractBalance(player.getUniqueId(), creationCost);
+                //Economy.subtractBalance(player.getUniqueId(), creationCost);
+                for (BankAccount acc : ZCore.Api.getBankAccounts()) {
+                    if (acc.getOwner().getUuid() == player.getUniqueId()) {
+                        acc.setBalance(acc.getBalance().subtract(BigDecimal.valueOf(creationCost)));
+                        break;
+                    }
+                }
                 message = language.getMessage("command_village_create_payment");
                 message = message.replace("%amount%", String.valueOf(creationCost));
                 message = message.replace("%village%", villageName);
@@ -147,13 +155,6 @@ public class JCreateCommand extends JVBaseCommand implements CommandExecutor {
         //Metadata for first chunk
         ChunkClaimSettings claimSettings = new ChunkClaimSettings(newVillage, System.currentTimeMillis() / 1000L, player.getUniqueId(), vChunk, 0);
         newVillage.addChunkClaimMetadata(claimSettings);
-
-        //Manually register the villages first chunk
-//        for (VClaim claim : newVillage.getClaims()) {
-//            System.out.println("[JVillage] Registering chunk at " + claim.getX() + "," + claim.getZ() + " in world " + claim.getWorldName() + " to village " + newVillage.getTownName());
-//            plugin.addClaim(claim);
-//        }
-//        plugin.loadAllChunks(newVillage);
 
         vPlayer.setSelectedVillage(newVillage);
         String message = language.getMessage("command_village_create_success");

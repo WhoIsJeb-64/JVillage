@@ -124,7 +124,7 @@ public class JVillageLanguage extends Configuration {
         //JVillage player help commands
         map.put("command_village_unknown", "&cSorry, that is invalid. Try /v and /v help");
 
-        map.put("command_village_use", "&9--- &bJVillage Menu&9---" +
+        map.put("command_village_use", "&3[&9========== &bJVillage Menu &9==========&3]" +
                 "\n&7Village In: %villagein%" +
                 "\n&7Village Selected: %village%" +
                 "\n&7Village Info: /v info [village]" +
@@ -191,7 +191,7 @@ public class JVillageLanguage extends Configuration {
 //                "\n&5Assistants: &d%assistants%" +
 //                "\n&2Members: &a%members%");
 
-        map.put("command_village_flag_list_use", "&9--- &bJVillage Flags&9---" +
+        map.put("command_village_flag_list_use", "&3[&9========== &bVillage Flags &9==========&3]" +
                 "%flags%");
 
         map.put("command_village_map_use", "&9----------- &bJVillage Map &9-----------");
@@ -396,7 +396,7 @@ public class JVillageLanguage extends Configuration {
     public String getMessage(String msg) {
         String loc = map.get(msg);
         if (loc != null) {
-            return loc.replace("&", "\u00a7");
+            return loc.replace("&", "§");
         }
         return msg;
     }

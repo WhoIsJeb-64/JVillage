@@ -83,9 +83,11 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.zavdav</groupId>
-            <artifactId>ZCore</artifactId>
-            <version>1.0.0-rc1</version>
+            <groupId>me.zavdav</groupId>
+            <artifactId>zcore</artifactId>
+            <version>0.23.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/zcore-0.23.2.jar</systemPath>
         </dependency>
 
         <dependency>

@@ -9,4 +9,5 @@ public enum VillageFlags {
     ASSISTANT_CAN_WITHDRAW,
     PREVENT_MUSHROOM_SPREAD,
     PREVENT_ICE_SNOW_MELT,
+    PVP_ENABLED,
 }

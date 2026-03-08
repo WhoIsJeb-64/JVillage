@@ -6,12 +6,14 @@ import com.johnymuffin.jvillage.beta.commands.JVBaseCommand;
 import com.johnymuffin.jvillage.beta.models.Village;
 import com.johnymuffin.jvillage.beta.models.VillageFlags;
 import com.johnymuffin.jvillage.beta.player.VPlayer;
-import me.zavdav.zcore.api.Economy;
+import me.zavdav.zcore.ZCore;
+import me.zavdav.zcore.economy.BankAccount;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
 import java.util.logging.Level;
 
 public class JWithdrawCommand extends JVBaseCommand implements CommandExecutor {
@@ -74,11 +76,7 @@ public class JWithdrawCommand extends JVBaseCommand implements CommandExecutor {
         amount = JVUtility.round(amount, 2);
 
         //Check user has permission to withdraw
-        boolean hasPermission = false;
-
-        if (village.isOwner(vPlayer.getUUID())) {
-            hasPermission = true;
-        }
+        boolean hasPermission = village.isOwner(vPlayer.getUUID());
 
         if (village.getFlags().get(VillageFlags.ASSISTANT_CAN_WITHDRAW) && village.isAssistant(vPlayer.getUUID())) {
             hasPermission = true;
@@ -102,7 +100,13 @@ public class JWithdrawCommand extends JVBaseCommand implements CommandExecutor {
 
         //Attempt to add money to player
         try {
-            Economy.addBalance(player.getUniqueId(), amount);
+            //Economy.addBalance(player.getUniqueId(), amount);
+            for (BankAccount acc : ZCore.Api.getBankAccounts()) {
+                if (acc.getOwner().getUuid() == player.getUniqueId()) {
+                    acc.setBalance(acc.getBalance().add(BigDecimal.valueOf(amount)));
+                    break;
+                }
+            }
             village.subtractBalance(amount);
             String message = language.getMessage("command_village_withdraw_success").replace("%amount%", String.valueOf(amount)).replace("%village%", village.getTownName());
             commandSender.sendMessage(message);
